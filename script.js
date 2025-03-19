@@ -10,11 +10,11 @@ const draw = ()=> {
   const canvas = document.getElementById("canvas");
   if (canvas.getContext) {
     const drawCtx = canvas.getContext("2d");
-    console.log("Clearing")
-    drawCtx.clearRect(0,0,3000, 3000)
+    // Clear canvas
+    drawCtx.clearRect(0,0,canvas.width, canvas.height)
     
+    // Draw entities
     for (const entity of entities) {
-      console.log(`Drawing entity ${entity}`)
       entity.drawFunc(drawCtx, entity);
     }
   }
