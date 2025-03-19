@@ -1,0 +1,52 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: burlywood;
+}
+
+.box {
+    width: 30em;
+    height: 30em;
+    background-color: chocolate;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#info {
+    text-align: center;
+    background-color: maroon;
+    margin: auto;
+}
+
+#text-box {
+    text-align: center;
+    background-color: red;
+    padding: 5px 5px;
+}
+
+canvas {
+    background-color: whitesmoke;
+}
+
+.buttons {
+    padding: 0.5em;
+    background-color: orange;
+    display: flex;
+    justify-content: center;
+    column-gap: 1em;
+}
+
+.submit-btn {
+    border: 5em;
+    min-width: 3em;
+    min-height: 2em;
+}
