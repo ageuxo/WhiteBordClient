@@ -66,3 +66,16 @@ canvas {
     min-height: 20px;
     background-color: coral;
 }
+
+.colour {
+    display: flex;
+    height: 20px;
+    width: 20xp;
+    background-color: blanchedalmond;
+    margin: 2px;
+    border: 2px solid gray;
+}
+
+.colour-select {
+    border-color: yellow;
+}

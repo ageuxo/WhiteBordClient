@@ -12,12 +12,14 @@ const tools = [
 ];
 let currentTool = tools[0];
 
-const updateSelectedTool = ()=> {
-  const selectedTool = document.querySelector('input[name="yourRadioName"]:checked');
-  if (selectedTool) {
-      currentTool = selectedTool.value;
-  }
-}
+const colourDivs = document.getElementsByClassName("colour");
+const colours = [
+  "#FF0000",
+  "#00FF00",
+  "#0000FF",
+  "#FFFFFF",
+  "#000000"
+]
 
 const useTool = (tool)=> {
   
@@ -67,6 +69,14 @@ const toolSelector = (e) => {
   }
 }
 
+const colourSelector = (e) => {
+  for (const div of colourDivs) {
+    div.classList.remove("colour-select")
+  }
+  e.target.classList.add("colour-select");
+  console.log(e.target.id);
+}
+
 entities.push({
   id:0,
   drawFunc: drawLine,
@@ -85,6 +95,12 @@ const radios = document.querySelectorAll("input");
 radios.forEach(radio => {
   radio.addEventListener("change", toolSelector)
 });
+
+for (let idx = 0; idx < colourDivs.length; idx++) {
+  const div = colourDivs[idx];
+  div.style.backgroundColor = colours[idx];
+  div.addEventListener("click", colourSelector);
+}
 
 setInterval(draw, 500);
 
