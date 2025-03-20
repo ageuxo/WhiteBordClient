@@ -50,3 +50,19 @@ canvas {
     min-width: 3em;
     min-height: 2em;
 }
+
+#board-frame {
+    display: flex;
+}
+
+#toolbar {
+    display: flex;
+    flex-direction: column;
+    background-color: brown;
+}
+
+.tool {
+    min-width: 20px;
+    min-height: 20px;
+    background-color: coral;
+}

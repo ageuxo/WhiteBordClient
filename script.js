@@ -5,6 +5,28 @@ const joinBtn = document.getElementById("join-btn");
 const createBtn = document.getElementById("create-btn");
 
 const entities = [];
+const tools = [
+  "line",
+  "box",
+  "circle"
+];
+let currentTool = tools[0];
+
+const updateSelectedTool = ()=> {
+  const selectedTool = document.querySelector('input[name="yourRadioName"]:checked');
+  if (selectedTool) {
+      currentTool = selectedTool.value;
+  }
+}
+
+const useTool = (tool)=> {
+  
+
+}
+
+const createLine = ()=> {
+  
+}
 
 const draw = ()=> {
   const canvas = document.getElementById("canvas");
@@ -38,6 +60,13 @@ function wait(ms) {
   return new Promise(r => setTimeout(r, ms));
 }
 
+const toolSelector = (e) => {
+  if (e.target.checked) {
+    selectedTool = e.target.value;
+    console.log("Selected tool: " + selectedTool)
+  }
+}
+
 entities.push({
   id:0,
   drawFunc: drawLine,
@@ -51,6 +80,11 @@ entities.push({
   green: 10,
   blue: 20
 })
+
+const radios = document.querySelectorAll("input");
+radios.forEach(radio => {
+  radio.addEventListener("change", toolSelector)
+});
 
 setInterval(draw, 500);
 
