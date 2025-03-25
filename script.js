@@ -20,12 +20,6 @@ class Entity{
   }
 }
 
-let DEBUG = true;
-
-const logDebug = (str)=> {
-  
-}
-
 const drawLine = (ctx, lineEntity)=> {
   let {points, colour} = lineEntity
   ctx.strokeStyle = colour.rgb;
