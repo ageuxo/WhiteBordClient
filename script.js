@@ -161,8 +161,8 @@ function wait(ms) {
 
 const toolSelector = (e) => {
   if (e.target.checked) {
-    selectedTool = e.target.value;
-    console.log("Selected tool: " + selectedTool)
+    currentTool = tools[e.target.value];
+    console.log("Selected tool: " + currentTool.name);
   }
 }
 
