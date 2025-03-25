@@ -20,6 +20,12 @@ class Entity{
   }
 }
 
+let DEBUG = true;
+
+const logDebug = (str)=> {
+  
+}
+
 const drawLine = (ctx, lineEntity)=> {
   let {points, colour} = lineEntity
   ctx.strokeStyle = colour.rgb;
@@ -59,12 +65,16 @@ const tools = {
   "line": {
     name: "line",
     start: (point, colour)=>{
+      console.log(`Start line tool @ ${point.x} ${point.y}`)
       localEntity = new LineEntity(-1, colour, point);
     },
     tick: (point)=>{
+        console.log(`Tick line tool @ ${point.x} ${point.y}`)
         localEntity.addPoint(point);
     },
     end: (point)=>{
+      console.log(`End line @ ${point.x} ${point.y}`)
+      localEntity.addPoint(point);
       entities.push(localEntity);
     }
   },
