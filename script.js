@@ -212,9 +212,10 @@ for (let idx = 0; idx < colourDivs.length; idx++) {
 canvas.addEventListener("mousedown", e => {startUsingTool(new Point(e.offsetX, e.offsetY), currentColour)});
 let cooldown = 0;
 canvas.addEventListener("mousemove", e => {
+  cooldown--;
   if (cooldown <= 0) {
     usingTool(new Point(e.offsetX, e.offsetY))
-    cooldown = 20;
+    cooldown = 10;
   }
 });
 canvas.addEventListener("mouseup", e => {finishUsingTool(new Point(e.offsetX, e.offsetY))});
