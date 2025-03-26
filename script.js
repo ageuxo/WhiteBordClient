@@ -10,6 +10,12 @@ class Point{
     this.x = x;
     this.y = y;
   }
+
+  distTo(p) {
+    let part = ((p.x - this.x)**2) + ((p.y - this.y)**2);
+    let dist = Math.sqrt(part);
+    return dist;
+  }
 }
 
 class Entity{
