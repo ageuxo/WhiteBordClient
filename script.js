@@ -83,6 +83,33 @@ class BoxEntity extends Entity{
   }
 }
 
+const drawCircle = (ctx, circleEntity)=> {
+  let {center, radius, colour, fill} = circleEntity;
+  ctx.beginPath();
+  ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
+  if (fill) {
+    ctx.fillStyle = colour.rgb;
+    ctx.fill();
+  } else {
+    ctx.strokeStyle = colour.rgb;
+    ctx.stroke();
+  }
+}
+
+class CircleEntity extends Entity{
+  constructor(id, colour, center, point, fill) {
+    super(id, colour, drawCircle)
+    this.center = center;
+    this.point = point;
+    this.fill = fill;
+  }
+
+  setPoint(point) {
+    this.point = point;
+    this.radius = this.center.distTo(point);
+  }
+}
+
 const entities = [];
 let lineCooldown = 0;
 let localEntity;
@@ -122,9 +149,19 @@ const tools = {
   },
   "circle": {
     name: "circle",
-    start: ()=>{},
-    tick: ()=>{},
-    end: ()=>{}
+    start: (point, colour)=>{
+      console.log(`Start circle tool @ ${point.x} ${point.y}`);
+      localEntity = new CircleEntity(-1, colour, point, point);
+    },
+    tick: (point)=>{
+        console.log(`Tick circle tool @ ${point.x} ${point.y}`);
+        localEntity.setPoint(point);
+    },
+    end: (point)=>{
+      console.log(`End circle @ ${point.x} ${point.y}`);
+      localEntity.setPoint(point);
+      entities.push(localEntity);
+    }
   },
 };
 let currentTool = tools["line"];
