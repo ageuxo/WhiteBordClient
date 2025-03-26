@@ -51,6 +51,32 @@ class LineEntity extends Entity{
   }
 }
 
+const drawBox = (ctx, boxEntity)=> {
+  let {a, b, colour, fill} = boxEntity;
+  ctx.beginPath();
+  ctx.moveTo(a.x, a.y);
+  ctx.lineTo(b.x, a.y);
+  ctx.lineTo(b.x, b.y);
+  ctx.lineTo(a.x, b.y)
+  ctx.closePath();
+  if (fill) {
+    ctx.fillStyle = colour.rbg;
+    ctx.fill();
+  } else {
+    ctx.strokeStyle = colour.rgb;
+    ctx.stroke();
+  }
+}
+
+class BoxEntity extends Entity{
+  constructor(id, colour, a, b, fill) {
+    super(id, colour, drawBox)
+    this.a = a;
+    this.b = b;
+    this.fill = fill;
+  }
+}
+
 const entities = [];
 let lineCooldown = 0;
 let localEntity;
@@ -74,9 +100,19 @@ const tools = {
   },
   "box": {
     name: "box",
-    start: ()=>{},
-    tick: ()=>{},
-    end: ()=>{}
+    start: (point, colour)=>{
+      console.log(`Start box tool @ ${point.x} ${point.y}`)
+      localEntity = new BoxEntity(-1, colour, point, new Point(point.x, point.y));
+    },
+    tick: (point)=>{
+        console.log(`Tick box tool @ ${point.x} ${point.y}`)
+        localEntity.b = point;
+    },
+    end: (point)=>{
+      console.log(`End box @ ${point.x} ${point.y}`)
+      localEntity.b = point;
+      entities.push(localEntity);
+    }
   },
   "circle": {
     name: "circle",
