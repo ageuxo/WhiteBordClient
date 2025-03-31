@@ -16,6 +16,10 @@ class Point{
     let dist = Math.sqrt(part);
     return dist;
   }
+
+  equalTo(p) {
+    return this.x == p.x && this.y == p.y;
+  }
 }
 
 class Entity{
@@ -51,7 +55,7 @@ class LineEntity extends Entity{
   }
 
   addPoint(point) {
-    if (point != null) {
+    if (this.points.length == 0 || !point.equalTo(this.points[this.points.length-1])) {
       this.points.push(point)
     }
   }
@@ -81,6 +85,12 @@ class BoxEntity extends Entity{
     this.b = b;
     this.fill = fill;
   }
+
+  setPoint(point) {
+    if (!this.b.equalTo(point)) {
+      this.b = point;
+    }
+  }
 }
 
 const drawCircle = (ctx, circleEntity)=> {
@@ -105,8 +115,10 @@ class CircleEntity extends Entity{
   }
 
   setPoint(point) {
-    this.point = point;
-    this.radius = this.center.distTo(point);
+    if (!this.point.equalTo(point)) {
+      this.point = point;
+      this.radius = this.center.distTo(point);
+    }
   }
 }
 
@@ -296,8 +308,9 @@ canvas.addEventListener("mousedown", e => {startUsingTool(new Point(e.offsetX, e
 let cooldown = 0;
 canvas.addEventListener("mousemove", e => {
   cooldown--;
+  usingTool(new Point(e.offsetX, e.offsetY))
   if (cooldown <= 0) {
-    usingTool(new Point(e.offsetX, e.offsetY))
+    draw();
     cooldown = 10;
   }
 });
