@@ -82,7 +82,7 @@ const drawBox = (ctx, boxEntity)=> {
   ctx.lineTo(b.x, b.y);
   ctx.lineTo(a.x, b.y)
   ctx.closePath();
-  drawPath(ctx, colour, fill, lineWidth);
+  drawPath(ctx, colour, lineWidth, fill);
 }
 
 class BoxEntity extends Entity{
