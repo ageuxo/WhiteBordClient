@@ -23,16 +23,28 @@ class Point{
 }
 
 class Entity{
-  constructor(id, colour, drawFunc) {
+  constructor(id, colour, drawFunc, lineWidth, fill = false) {
     this.id = id
     this.colour = colour;
     this.drawFunc = drawFunc;
+    this.lineWidth = lineWidth;
+    this.fill = fill;
+  }
+}
+
+const drawPath = (ctx, colour, lineWidth, fill)=> {
+  if (fill) {
+    ctx.fillStyle = colour.rgb;
+    ctx.fill();
+  } else {
+    ctx.strokeStyle = colour.rgb;
+    ctx.lineWidth = lineWidth;
+    ctx.stroke();
   }
 }
 
 const drawLine = (ctx, lineEntity)=> {
-  let {points, colour} = lineEntity
-  ctx.strokeStyle = colour.rgb;
+  let {points, colour, fill, lineWidth} = lineEntity;
   ctx.beginPath();
   for (let idx = 0; idx < points.length; idx++) {
     const {x, y} = points[idx];
@@ -42,13 +54,13 @@ const drawLine = (ctx, lineEntity)=> {
       ctx.lineTo(x, y)
     }
   }
-  ctx.stroke();
+  drawPath(ctx, colour, lineWidth, fill);
 }
 
 class LineEntity extends Entity{
   points = [];
-  constructor(id, colour, ...points) {
-    super(id, colour, drawLine)
+  constructor(id, colour, lineWidth, fill, ...points) {
+    super(id, colour, drawLine, lineWidth, fill);
     for (const point of points) {
       this.addPoint(point);
     }
@@ -62,28 +74,21 @@ class LineEntity extends Entity{
 }
 
 const drawBox = (ctx, boxEntity)=> {
-  let {a, b, colour, fill} = boxEntity;
+  let {a, b, colour, lineWidth, fill} = boxEntity;
   ctx.beginPath();
   ctx.moveTo(a.x, a.y);
   ctx.lineTo(b.x, a.y);
   ctx.lineTo(b.x, b.y);
   ctx.lineTo(a.x, b.y)
   ctx.closePath();
-  if (fill) {
-    ctx.fillStyle = colour.rbg;
-    ctx.fill();
-  } else {
-    ctx.strokeStyle = colour.rgb;
-    ctx.stroke();
-  }
+  drawPath(ctx, colour, fill, lineWidth);
 }
 
 class BoxEntity extends Entity{
-  constructor(id, colour, a, b, fill) {
-    super(id, colour, drawBox)
+  constructor(id, colour, a, b, lineWidth, fill) {
+    super(id, colour, drawBox, lineWidth, fill);
     this.a = a;
     this.b = b;
-    this.fill = fill;
   }
 
   setPoint(point) {
@@ -94,24 +99,17 @@ class BoxEntity extends Entity{
 }
 
 const drawCircle = (ctx, circleEntity)=> {
-  let {center, radius, colour, fill} = circleEntity;
+  let {center, radius, colour, lineWidth, fill} = circleEntity;
   ctx.beginPath();
   ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
-  if (fill) {
-    ctx.fillStyle = colour.rgb;
-    ctx.fill();
-  } else {
-    ctx.strokeStyle = colour.rgb;
-    ctx.stroke();
-  }
+  drawPath(ctx, colour, lineWidth, fill);
 }
 
 class CircleEntity extends Entity{
-  constructor(id, colour, center, point, fill) {
-    super(id, colour, drawCircle)
+  constructor(id, colour, center, point, lineWidth, fill) {
+    super(id, colour, drawCircle, lineWidth, fill);
     this.center = center;
     this.point = point;
-    this.fill = fill;
   }
 
   setPoint(point) {
@@ -129,9 +127,9 @@ let localEntity;
 const tools = {
   "line": {
     name: "line",
-    start: (point, colour)=>{
+    start: (point, colour, lineWidth, fill)=>{
       console.log(`Start line tool @ ${point.x} ${point.y}`)
-      localEntity = new LineEntity(-1, colour, point);
+      localEntity = new LineEntity(-1, colour, lineWidth, fill, point);
     },
     tick: (point)=>{
         console.log(`Tick line tool @ ${point.x} ${point.y}`)
@@ -145,9 +143,9 @@ const tools = {
   },
   "box": {
     name: "box",
-    start: (point, colour)=>{
+    start: (point, colour, lineWidth, fill)=>{
       console.log(`Start box tool @ ${point.x} ${point.y}`)
-      localEntity = new BoxEntity(-1, colour, point, new Point(point.x, point.y));
+      localEntity = new BoxEntity(-1, colour, point, new Point(point.x, point.y), lineWidth, fill);
     },
     tick: (point)=>{
         console.log(`Tick box tool @ ${point.x} ${point.y}`)
@@ -161,9 +159,9 @@ const tools = {
   },
   "circle": {
     name: "circle",
-    start: (point, colour)=>{
+    start: (point, colour, lineWidth, fill)=>{
       console.log(`Start circle tool @ ${point.x} ${point.y}`);
-      localEntity = new CircleEntity(-1, colour, point, point);
+      localEntity = new CircleEntity(-1, colour, point, point, lineWidth, fill);
     },
     tick: (point)=>{
         console.log(`Tick circle tool @ ${point.x} ${point.y}`);
@@ -204,12 +202,14 @@ const colours = [
 ]
 
 let currentColour = colours[0];
+let currentLineWidth = 1;
+let currentFill = false;
 
-const startUsingTool = (point, colour)=> {
+const startUsingTool = (point, colour, lineWidth, fill)=> {
   if (!isUsingTool) {
     console.log(`Start using tool: ${currentTool.name} with ${colour.id}`);
     isUsingTool = true;
-    currentTool.start(point, colour);
+    currentTool.start(point, colour, lineWidth, fill);
   }
 }
 
@@ -301,7 +301,9 @@ for (let idx = 0; idx < colourDivs.length; idx++) {
   div.addEventListener("click", colourSelector);
 }
 
-canvas.addEventListener("mousedown", e => {startUsingTool(new Point(e.offsetX, e.offsetY), currentColour)});
+canvas.addEventListener("mousedown", e => {
+  startUsingTool(new Point(e.offsetX, e.offsetY), currentColour, 1, false);
+});
 let cooldown = 0;
 canvas.addEventListener("mousemove", e => {
   cooldown--;
