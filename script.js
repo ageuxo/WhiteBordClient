@@ -266,6 +266,7 @@ const colourSelector = (e) => {
   console.log(`Colour set to ${currentColour.id}`);
 }
 
+/* Debug entities
 entities.push(
   {
     id: 0,
@@ -289,7 +290,7 @@ entities.push(
     ],
     colour: colours[2]
   }
-)
+) */
 
 const radios = document.querySelectorAll("input");
 radios.forEach(radio => {
