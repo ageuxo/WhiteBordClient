@@ -151,7 +151,7 @@ const tools = {
     },
     tick: (point)=>{
         console.log(`Tick box tool @ ${point.x} ${point.y}`)
-        localEntity.b = point;
+        localEntity.setPoint(point);
     },
     end: (point)=>{
       console.log(`End box @ ${point.x} ${point.y}`)
