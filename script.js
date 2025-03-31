@@ -289,7 +289,7 @@ entities.push(
   }
 ) */
 
-const radios = document.querySelectorAll("input");
+const radios = document.querySelectorAll("input[type=radio]");
 radios.forEach(radio => {
   radio.addEventListener("change", toolSelector)
 });
