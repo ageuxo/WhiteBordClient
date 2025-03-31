@@ -246,10 +246,6 @@ const drawEntities = ()=> {
   }
 }
 
-function wait(ms) {
-  return new Promise(r => setTimeout(r, ms));
-}
-
 const toolSelector = (e) => {
   if (e.target.checked) {
     currentTool = tools[e.target.value];
@@ -322,16 +318,3 @@ setInterval(()=>{
   drawEntities();
   cooldown = 10;
 }, 500);
-
-/* test 
-window.addEventListener("load", async ()=> {
-  console.log("Draw 1")
-  draw()
-  await wait(2000)
-  console.log("Draw 2")
-  draw()
-  await wait(2000)
-  console.log("Draw 3")
-  draw()
-  await wait(2000)
-}); */
