@@ -229,7 +229,7 @@ const finishUsingTool = (point)=> {
   }
 }
 
-const draw = ()=> {
+const drawEntities = ()=> {
   if (canvas.getContext) {
     const drawCtx = canvas.getContext("2d");
     // Clear canvas
@@ -310,14 +310,17 @@ canvas.addEventListener("mousemove", e => {
   cooldown--;
   usingTool(new Point(e.offsetX, e.offsetY))
   if (cooldown <= 0) {
-    draw();
+    drawEntities();
     cooldown = 10;
   }
 });
 canvas.addEventListener("mouseup", e => {finishUsingTool(new Point(e.offsetX, e.offsetY))});
 canvas.addEventListener("mouseleave", e => {finishUsingTool(new Point(e.offsetX, e.offsetY))});
 
-setInterval(draw, 500);
+setInterval(()=>{
+  drawEntities();
+  cooldown = 10;
+}, 500);
 
 /* test 
 window.addEventListener("load", async ()=> {
