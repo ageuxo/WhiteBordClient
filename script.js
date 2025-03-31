@@ -5,6 +5,7 @@ const joinBtn = document.getElementById("join-btn");
 const createBtn = document.getElementById("create-btn");
 const canvas = document.getElementById("canvas");
 const strokeWidthSlider = document.getElementById("stroke-width");
+const fillToggle = document.getElementById("fill-toggle");
 
 class Point{
   constructor(x, y) {
@@ -303,7 +304,7 @@ for (let idx = 0; idx < colourDivs.length; idx++) {
 }
 
 canvas.addEventListener("mousedown", e => {
-  startUsingTool(new Point(e.offsetX, e.offsetY), currentColour, strokeWidthSlider.value, false);
+  startUsingTool(new Point(e.offsetX, e.offsetY), currentColour, strokeWidthSlider.value, fillToggle.checked);
 });
 let cooldown = 0;
 canvas.addEventListener("mousemove", e => {
