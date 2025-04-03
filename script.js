@@ -7,6 +7,8 @@ const canvas = document.getElementById("canvas");
 const strokeWidthSlider = document.getElementById("stroke-width");
 const fillToggle = document.getElementById("fill-toggle");
 
+let webSocket = new WebSocket("wss://localhost:55455");
+
 class Point{
   constructor(x, y) {
     this.x = x;
@@ -289,6 +291,23 @@ entities.push(
     colour: colours[2]
   }
 ) */
+
+  webSocket.addEventListener("open", (e)=> {
+    console.log(`Connected to WebSocket @ ${webSocket.url}`);
+  })
+  
+  webSocket.addEventListener("close", (e)=> {
+    console.log("WebSocket connection closed");
+    alert()
+  })
+  
+  webSocket.addEventListener("error", (e)=> {
+    console.log("WebSocket error: ", e);
+  })
+
+  webSocket.addEventListener("message", (e)=> {
+    console.log("WebSocket message: ", e.data);
+  })
 
 const radios = document.querySelectorAll("input[type=radio]");
 radios.forEach(radio => {
