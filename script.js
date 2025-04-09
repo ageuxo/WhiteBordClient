@@ -7,7 +7,30 @@ const canvas = document.getElementById("canvas");
 const strokeWidthSlider = document.getElementById("stroke-width");
 const fillToggle = document.getElementById("fill-toggle");
 
-let webSocket = new WebSocket("wss://localhost:55455");
+let webSocket = new WebSocket("ws://localhost:55455");
+
+const sendPayloadOf = (data)=> {
+  const payload = JSON.stringify(data);
+  webSocket.send(payload);
+}
+
+webSocket.addEventListener('open', onOpenSocket);
+webSocket.addEventListener('message', receivePayload);
+webSocket.addEventListener('error', console.error);
+webSocket.addEventListener('close', onCloseSocket);
+
+function receivePayload(data) {
+  console.log('received %s'. data);
+}
+
+function onOpenSocket() {
+  console.log('socket opened');
+  webSocket.send('hello server!');
+}
+
+function onCloseSocket() {
+  console.log('socket closed');
+}
 
 class Point{
   constructor(x, y) {
@@ -142,7 +165,7 @@ const tools = {
     end: (point)=>{
       console.log(`End line @ ${point.x} ${point.y}`)
       localEntity.addPoint(point);
-      entities.push(localEntity);
+      sendPayloadOf(localEntity);
     }
   },
   "box": {
@@ -158,7 +181,7 @@ const tools = {
     end: (point)=>{
       console.log(`End box @ ${point.x} ${point.y}`)
       localEntity.b = point;
-      entities.push(localEntity);
+      sendPayloadOf(localEntity);
     }
   },
   "circle": {
@@ -174,7 +197,7 @@ const tools = {
     end: (point)=>{
       console.log(`End circle @ ${point.x} ${point.y}`);
       localEntity.setPoint(point);
-      entities.push(localEntity);
+      sendPayloadOf(localEntity);
     }
   },
 };
