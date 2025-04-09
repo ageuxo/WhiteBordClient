@@ -9,9 +9,13 @@ const fillToggle = document.getElementById("fill-toggle");
 
 let webSocket = new WebSocket("ws://localhost:55455");
 
-const sendPayloadOf = (data)=> {
-  const payload = JSON.stringify(data);
-  webSocket.send(payload);
+const sendNewEntity = (entity)=> {
+  const payload = {
+    type: "add",
+    entity: entity
+  }
+  const json = JSON.stringify(payload);
+  webSocket.send(json);
 }
 
 webSocket.addEventListener('open', onOpenSocket);
@@ -19,17 +23,35 @@ webSocket.addEventListener('message', receivePayload);
 webSocket.addEventListener('error', console.error);
 webSocket.addEventListener('close', onCloseSocket);
 
-function receivePayload(data) {
-  console.log('received %s'. data);
+function receivePayload(p) {
+  console.log('received %s', p.data);
+  handlePayload(JSON.parse(p.data));
 }
 
 function onOpenSocket() {
-  console.log('socket opened');
-  webSocket.send('hello server!');
+  console.log(`Connected to WebSocket @ ${webSocket.url}`);
 }
 
 function onCloseSocket() {
   console.log('socket closed');
+}
+
+function handlePayload(payload) {
+  switch (payload.type) {
+    case "add":
+      entities.push(payload.entity);
+      break;
+    case "added":
+      const entity = localEntity;
+      localEntity = null;
+      entity.id = payload.newId;
+      entities.push(entity);
+      entities.sort((a, b)=> a.id - b.id);
+      break;
+    default:
+      console.log(`Error handling payload from server: type is not recognized! type: ${payload.type}`);
+      break;
+  }
 }
 
 class Point{
@@ -50,7 +72,8 @@ class Point{
 }
 
 class Entity{
-  constructor(id, colour, drawFunc, lineWidth, fill = false) {
+  constructor(type, id, colour, drawFunc, lineWidth, fill = false) {
+    this.type = type;
     this.id = id
     this.colour = colour;
     this.drawFunc = drawFunc;
@@ -87,7 +110,7 @@ const drawLine = (ctx, lineEntity)=> {
 class LineEntity extends Entity{
   points = [];
   constructor(id, colour, lineWidth, fill, ...points) {
-    super(id, colour, drawLine, lineWidth, fill);
+    super("line", id, colour, drawLine, lineWidth, fill);
     for (const point of points) {
       this.addPoint(point);
     }
@@ -113,7 +136,7 @@ const drawBox = (ctx, boxEntity)=> {
 
 class BoxEntity extends Entity{
   constructor(id, colour, a, b, lineWidth, fill) {
-    super(id, colour, drawBox, lineWidth, fill);
+    super("box", id, colour, drawBox, lineWidth, fill);
     this.a = a;
     this.b = b;
   }
@@ -134,7 +157,7 @@ const drawCircle = (ctx, circleEntity)=> {
 
 class CircleEntity extends Entity{
   constructor(id, colour, center, point, lineWidth, fill) {
-    super(id, colour, drawCircle, lineWidth, fill);
+    super("circle", id, colour, drawCircle, lineWidth, fill);
     this.center = center;
     this.point = point;
   }
@@ -165,7 +188,7 @@ const tools = {
     end: (point)=>{
       console.log(`End line @ ${point.x} ${point.y}`)
       localEntity.addPoint(point);
-      sendPayloadOf(localEntity);
+      sendNewEntity(localEntity);
     }
   },
   "box": {
@@ -181,7 +204,7 @@ const tools = {
     end: (point)=>{
       console.log(`End box @ ${point.x} ${point.y}`)
       localEntity.b = point;
-      sendPayloadOf(localEntity);
+      sendNewEntity(localEntity);
     }
   },
   "circle": {
@@ -197,7 +220,7 @@ const tools = {
     end: (point)=>{
       console.log(`End circle @ ${point.x} ${point.y}`);
       localEntity.setPoint(point);
-      sendPayloadOf(localEntity);
+      sendNewEntity(localEntity);
     }
   },
 };
@@ -315,22 +338,6 @@ entities.push(
   }
 ) */
 
-  webSocket.addEventListener("open", (e)=> {
-    console.log(`Connected to WebSocket @ ${webSocket.url}`);
-  })
-  
-  webSocket.addEventListener("close", (e)=> {
-    console.log("WebSocket connection closed");
-    alert()
-  })
-  
-  webSocket.addEventListener("error", (e)=> {
-    console.log("WebSocket error: ", e);
-  })
-
-  webSocket.addEventListener("message", (e)=> {
-    console.log("WebSocket message: ", e.data);
-  })
 
 const radios = document.querySelectorAll("input[type=radio]");
 radios.forEach(radio => {
