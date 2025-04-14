@@ -28,6 +28,11 @@ function receivePayload(p) {
   handlePayload(JSON.parse(p.data));
 }
 
+function onSocketError(e) {
+  console.log(`Error was thrown: CODE: ${e.code}, REASON: ${e.reason}, CLEAN: ${e.wasCleam}`);
+  console.error(e);
+}
+
 function onOpenSocket() {
   console.log(`Connected to WebSocket @ ${webSocket.url}`);
 }
