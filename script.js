@@ -20,7 +20,7 @@ const sendNewEntity = (entity)=> {
 
 webSocket.addEventListener('open', onOpenSocket);
 webSocket.addEventListener('message', receivePayload);
-webSocket.addEventListener('error', console.error);
+webSocket.addEventListener('error', onSocketError);
 webSocket.addEventListener('close', onCloseSocket);
 
 function receivePayload(p) {
