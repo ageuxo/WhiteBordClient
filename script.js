@@ -7,7 +7,8 @@ const canvas = document.getElementById("canvas");
 const strokeWidthSlider = document.getElementById("stroke-width");
 const fillToggle = document.getElementById("fill-toggle");
 
-let webSocket = new WebSocket("ws://localhost:55455");
+let webSocket = new WebSocket("wss://ageuxo.org:55455");
+console.log("Websocket created on " + webSocket.url);
 
 const sendNewEntity = (entity)=> {
   const payload = {
