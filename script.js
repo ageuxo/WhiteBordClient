@@ -45,7 +45,7 @@ function onCloseSocket() {
 function handlePayload(payload) {
   switch (payload.type) {
     case "add":
-      entities.push(payload.entity);
+      addCleanEntity(payload.entity);
       break;
     case "added":
       const entity = localEntity;
@@ -58,6 +58,27 @@ function handlePayload(payload) {
       console.log(`Error handling payload from server: type is not recognized! type: ${payload.type}`);
       break;
   }
+}
+
+function addCleanEntity(entity) {
+  let newEntity;
+  switch (entity.type) {
+    case "line":
+      newEntity = new LineEntity(entity.id, entity.colour, entity.lineWidth, entity.fill, entity.points);
+      break;
+
+    case "box":
+      newEntity = new BoxEntity(entity.id, entity.colour, entity.a, entity.b, entity.lineWidth, entity.fill);
+      break;
+
+    case "circle":
+      newEntity = new CircleEntity(entity.id, entity.colour, entity.center, entity.point, entity.lineWidth, entity.fill);
+      break;
+
+    default:
+      break;
+  }
+  entities.push(newEntity);
 }
 
 class Point{
