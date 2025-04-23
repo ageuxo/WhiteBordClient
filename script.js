@@ -124,6 +124,12 @@ function pointsEqual(p1, p2) {
   return p1.x == p2.x && p1.y == p2.y;
 }
 
+function distTo(p1, p2) {
+  let part = ((p2.x - p1.x)**2) + ((p2.y - p1.y)**2);
+  let dist = Math.sqrt(part);
+  return dist;
+}
+
 class Entity{
   constructor(type, id, colour, drawFunc, lineWidth, fill = false) {
     this.type = type;
@@ -213,13 +219,13 @@ class CircleEntity extends Entity{
     super("circle", id, colour, drawCircle, lineWidth, fill);
     this.center = center;
     this.point = point;
-    this.radius = this.center.distTo(point);
+    this.radius = distTo(point, center);
   }
 
   setPoint(point) {
     if (!this.point.equalTo(point)) {
       this.point = point;
-      this.radius = this.center.distTo(point);
+      this.radius = distTo(point, this.center);
     }
   }
 }
