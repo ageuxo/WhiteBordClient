@@ -214,7 +214,7 @@ class CircleEntity extends Entity{
   }
 }
 
-const entities = [];
+let entities = [];
 let lineCooldown = 0;
 let localEntity;
 
