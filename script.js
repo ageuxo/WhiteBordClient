@@ -243,12 +243,20 @@ const tools = {
     },
     tick: (point)=>{
         console.log(`Tick line tool @ ${point.x} ${point.y}`)
-        localEntity.addPoint(point);
+        if (localEntity instanceof LineEntity) {
+          localEntity.addPoint(point)
+        } else {
+          console.log("Error: local entity is not a line entity!");
+        }
     },
     end: (point)=>{
       console.log(`End line @ ${point.x} ${point.y}`)
-      localEntity.addPoint(point);
-      sendNewEntity(localEntity);
+      if (localEntity instanceof LineEntity) {
+        localEntity.addPoint(point);
+        sendNewEntity(localEntity);
+      } else {
+        console.log("Error: local entity is not a line entity!");
+      }
     }
   },
   "box": {
@@ -259,12 +267,20 @@ const tools = {
     },
     tick: (point)=>{
         console.log(`Tick box tool @ ${point.x} ${point.y}`)
-        localEntity.setPoint(point);
+        if (localEntity instanceof BoxEntity) {
+          localEntity.setPoint(point);
+        } else {
+          console.log("Error: local entity is not a box entity!");
+        }
     },
     end: (point)=>{
       console.log(`End box @ ${point.x} ${point.y}`)
-      localEntity.b = point;
-      sendNewEntity(localEntity);
+      if (localEntity instanceof BoxEntity) {
+        localEntity.b = point;
+        sendNewEntity(localEntity);
+      } else {
+        console.log("Error: local entity is not a box entity!");
+      }
     }
   },
   "circle": {
@@ -275,12 +291,20 @@ const tools = {
     },
     tick: (point)=>{
         console.log(`Tick circle tool @ ${point.x} ${point.y}`);
-        localEntity.setPoint(point);
+        if (localEntity instanceof CircleEntity) {
+          localEntity.setPoint(point);
+        } else {
+          console.log("Error: local entity is not a circle entity!");
+        }
     },
     end: (point)=>{
       console.log(`End circle @ ${point.x} ${point.y}`);
-      localEntity.setPoint(point);
-      sendNewEntity(localEntity);
+      if (localEntity instanceof CircleEntity) {
+        localEntity.setPoint(point);
+        sendNewEntity(localEntity);
+      } else {
+        console.log("Error: local entity is not a circle entity!");
+      }
     }
   },
 };
