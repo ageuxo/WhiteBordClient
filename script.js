@@ -74,7 +74,7 @@ function addCleanEntity(entity) {
   switch (entity.type) {
     case "line":
       console.log(`Adding line entity with id ${entity.id}`);
-      newEntity = new LineEntity(entity.id, entity.colour, entity.lineWidth, entity.fill, entity.points);
+      newEntity = new LineEntity(entity.id, entity.colour, entity.lineWidth, entity.fill, ...entity.points);
       break;
 
     case "box":
@@ -118,6 +118,10 @@ class Point{
   equalTo(p) {
     return this.x == p.x && this.y == p.y;
   }
+}
+
+function pointsEqual(p1, p2) {
+  return p1.x == p2.x && p1.y == p2.y;
 }
 
 class Entity{
@@ -166,7 +170,7 @@ class LineEntity extends Entity{
   }
 
   addPoint(point) {
-    if (this.points.length == 0 || !point.equalTo(this.points[this.points.length-1])) {
+    if (this.points.length == 0 || !pointsEqual(point, this.points[this.points.length-1])) {
       this.points.push(point)
     }
   }
