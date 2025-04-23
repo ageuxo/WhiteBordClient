@@ -6,9 +6,13 @@ const createBtn = document.getElementById("create-btn");
 const canvas = document.getElementById("canvas");
 const strokeWidthSlider = document.getElementById("stroke-width");
 const fillToggle = document.getElementById("fill-toggle");
+const connectDialog = document.getElementById("dialog");
 
 let webSocket = new WebSocket("wss://ageuxo.org/ws");
 console.log("Websocket created on " + webSocket.url);
+
+// Prevent drawing before websocket connection is established
+connectDialog.showModal();
 
 const sendNewEntity = (entity)=> {
   const payload = {
@@ -62,6 +66,7 @@ function handlePayload(payload) {
       for (const entity of payload.entities) {
         addCleanEntity(entity);
       }
+      connectDialog.close();
       break;
     default:
       console.log(`Error handling payload from server: type is not recognized! type: ${payload.type}`);
