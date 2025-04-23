@@ -73,21 +73,26 @@ function addCleanEntity(entity) {
   let newEntity;
   switch (entity.type) {
     case "line":
+      console.log(`Adding line entity with id ${entity.id}`);
       newEntity = new LineEntity(entity.id, entity.colour, entity.lineWidth, entity.fill, entity.points);
       break;
 
     case "box":
+      console.log(`Adding box entity with id ${entity.id}`);
       newEntity = new BoxEntity(entity.id, entity.colour, entity.a, entity.b, entity.lineWidth, entity.fill);
       break;
 
     case "circle":
+      console.log(`Adding circle entity with id ${entity.id}`);
       newEntity = new CircleEntity(entity.id, entity.colour, entity.center, entity.point, entity.lineWidth, entity.fill);
       break;
 
     default:
+      console.log(`Error adding entity: type is not recognized! type: ${entity.type}`);
       break;
   }
   entities.push(newEntity);
+  drawEntities();
 }
 
 function requestSync() {
