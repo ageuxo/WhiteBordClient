@@ -170,7 +170,7 @@ class LineEntity extends Entity{
   }
 
   addPoint(point) {
-    if (this.points.length == 0 || !pointsEqual(p, this.points[this.points.length-1])) {
+    if (this.points.length == 0 || !pointsEqual(point, this.points[this.points.length-1])) {
       this.points.push(point)
     }
   }
