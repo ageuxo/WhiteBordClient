@@ -36,6 +36,8 @@ function onSocketError(e) {
 
 function onOpenSocket() {
   console.log(`Connected to WebSocket @ ${webSocket.url}`);
+  requestSync();
+  console.log("Requesting sync from server...");
 }
 
 function onCloseSocket() {
@@ -86,6 +88,14 @@ function addCleanEntity(entity) {
       break;
   }
   entities.push(newEntity);
+}
+
+function requestSync() {
+  const payload = {
+    type: "sync"
+  }
+  const json = JSON.stringify(payload);
+  webSocket.send(json);
 }
 
 class Point{
