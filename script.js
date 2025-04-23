@@ -43,6 +43,7 @@ function onCloseSocket() {
 }
 
 function handlePayload(payload) {
+  console.log(`Handling payload from server with type: ${payload.type}.`);
   switch (payload.type) {
     case "add":
       addCleanEntity(payload.entity);
@@ -53,6 +54,12 @@ function handlePayload(payload) {
       entity.id = payload.newId;
       entities.push(entity);
       entities.sort((a, b)=> a.id - b.id);
+      break;
+    case "sync":
+      entities = [];
+      for (const entity of payload.entities) {
+        addCleanEntity(entity);
+      }
       break;
     default:
       console.log(`Error handling payload from server: type is not recognized! type: ${payload.type}`);
